@@ -68,7 +68,7 @@ Prop yang butuh query DB atau memperlambat first paint HARUS di-defer:
 
 ```php
 Inertia::render('Users/Index', [
-    'users' => Inertia::deferred(fn () => User::paginate()),
+    'users' => Inertia::defer(fn () => User::paginate()),
 ]);
 ```
 
