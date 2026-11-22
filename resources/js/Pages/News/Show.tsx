@@ -23,6 +23,9 @@ export default function NewsShow({
                     <img
                         src={news.image_url}
                         alt={news.title}
+                        width={800}
+                        height={450}
+                        fetchPriority="high"
                         className="h-64 w-full object-cover sm:h-80"
                         decoding="async"
                     />

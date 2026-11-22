@@ -38,6 +38,8 @@ export default function NewsIndex({
                                     <img
                                         src={item.image_url}
                                         alt={item.title}
+                                        width={800}
+                                        height={450}
                                         className="h-44 w-full object-cover transition group-hover:opacity-90"
                                         loading="lazy"
                                         decoding="async"

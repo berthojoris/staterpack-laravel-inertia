@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Support\PlaceholderImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,7 +25,7 @@ class NewsFactory extends Factory
             'excerpt' => fake()->paragraph(2),
             'content' => fake()->paragraphs(4, true),
             'author' => fake()->name(),
-            'image_url' => 'https://picsum.photos/seed/'.str()->random(8).'/800/450',
+            'image_url' => PlaceholderImage::generate('factory-'.str()->random(8)),
             'published_at' => fake()->dateTimeBetween('-1 month', 'now'),
         ];
     }
