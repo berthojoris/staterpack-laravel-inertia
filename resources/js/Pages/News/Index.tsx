@@ -1,64 +1,33 @@
-import { NewsItem, PageProps } from '@/types';
-import { Deferred, Head, Link } from '@inertiajs/react';
+import PublicLayout from '@/Layouts/PublicLayout';
+import { formatDate } from '@/lib/format-date';
+import { NewsItem, PublicPageProps } from '@/types';
+import { Deferred, Head, InfiniteScroll, Link } from '@inertiajs/react';
+
+type NewsPage = {
+    data: NewsItem[];
+};
 
 export default function NewsIndex({
     auth,
     news,
-}: PageProps<{ news?: NewsItem[] }>) {
+}: PublicPageProps<{ news?: NewsPage }>) {
     return (
-        <>
+        <PublicLayout user={auth.user}>
             <Head title="Berita Terbaru" />
 
-            <div className="min-h-screen bg-gray-100 text-gray-900">
-                <header className="border-b border-gray-200 bg-white">
-                    <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-                        <Link
-                            href={route('news.index')}
-                            className="text-lg font-semibold text-gray-900"
-                        >
-                            Blog Laravel
-                        </Link>
+            <div className="mx-auto max-w-5xl px-6 py-10">
+                <h1 className="text-3xl font-bold text-gray-900">
+                    Berita Terbaru
+                </h1>
+                <p className="mt-2 text-gray-600">
+                    Kabar teknologi terkini seputar ekosistem Laravel dan web
+                    development.
+                </p>
 
-                        <nav className="flex items-center gap-4 text-sm">
-                            {auth.user ? (
-                                <Link
-                                    href={route('dashboard')}
-                                    className="rounded-md px-3 py-2 text-gray-600 transition hover:text-gray-900"
-                                >
-                                    Dashboard
-                                </Link>
-                            ) : (
-                                <>
-                                    <Link
-                                        href={route('login')}
-                                        className="rounded-md px-3 py-2 text-gray-600 transition hover:text-gray-900"
-                                    >
-                                        Log in
-                                    </Link>
-                                    <Link
-                                        href={route('register')}
-                                        className="rounded-md bg-gray-900 px-3 py-2 text-white transition hover:bg-gray-700"
-                                    >
-                                        Register
-                                    </Link>
-                                </>
-                            )}
-                        </nav>
-                    </div>
-                </header>
-
-                <main className="mx-auto max-w-5xl px-6 py-10">
-                    <h1 className="text-3xl font-bold text-gray-900">
-                        Berita Terbaru
-                    </h1>
-                    <p className="mt-2 text-gray-600">
-                        Kabar teknologi terkini seputar ekosistem Laravel dan
-                        web development.
-                    </p>
-
-                    <Deferred data="news" fallback={<NewsSkeleton />}>
+                <Deferred data="news" fallback={<NewsSkeleton />}>
+                    <InfiniteScroll data="news" loading={<NewsLoading />}>
                         <div className="mt-8 grid gap-6 sm:grid-cols-2">
-                            {news?.map((item) => (
+                            {news?.data.map((item) => (
                                 <Link
                                     key={item.id}
                                     href={route('news.show', item.slug)}
@@ -71,6 +40,7 @@ export default function NewsIndex({
                                         alt={item.title}
                                         className="h-44 w-full object-cover transition group-hover:opacity-90"
                                         loading="lazy"
+                                        decoding="async"
                                     />
 
                                     <div className="p-5">
@@ -90,10 +60,10 @@ export default function NewsIndex({
                                 </Link>
                             ))}
                         </div>
-                    </Deferred>
-                </main>
+                    </InfiniteScroll>
+                </Deferred>
             </div>
-        </>
+        </PublicLayout>
     );
 }
 
@@ -118,10 +88,10 @@ function NewsSkeleton() {
     );
 }
 
-function formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    });
+function NewsLoading() {
+    return (
+        <div className="flex justify-center py-6" aria-busy="true">
+            <div className="h-3 w-24 animate-pulse rounded bg-gray-300" />
+        </div>
+    );
 }

@@ -18,6 +18,15 @@ Panduan pengembangan untuk AI agent dan kontributor. Semua aturan di bawah mence
 | Lint/format | ESLint 8 + Prettier 3 (+ plugin tailwindcss & organize-imports) | — |
 | Database | SQLite (default, mudah diganti via `DB_CONNECTION`) | — |
 
+## Verifikasi API & Dokumentasi (WAJIB)
+
+Selalu gunakan **MCP Context7** untuk mengecek API dan dokumentasi fitur terbaru Inertia.js dan Laravel sebelum menulis kode — jangan mengandalkan ingatan model yang bisa outdated:
+
+- Library ID yang lazim: `inertiajs/inertia-laravel` (adapter Laravel), `inertiajs/inertia` (client core + adapter React), dan dokumentasi Laravel. Jika ID berubah, cari dulu lewat fitur pencarian library Context7.
+- Query per satu topik spesifik (contoh: "deferred props in Laravel", "useForm persistence key"), bukan query generik seperti "inertia".
+- Jika ragu signature persisnya, cross-check dua sumber: dokumentasi Context7 DAN kode yang terinstall (`vendor/inertiajs/inertia-laravel/src/` untuk API PHP, `node_modules/@inertiajs/react/types/` untuk API React). Yang terinstall adalah kebenaran final.
+- Berlaku untuk API baru maupun lama — nama metode bisa berubah antar versi mayor (contoh: `Inertia::defer()`, bukan `deferred()`).
+
 ## Architecture
 
 ```
@@ -161,6 +170,7 @@ composer dev         # server + queue + pail + vite sekaligus
 
 ## AI Agent Checklist (sebelum selesai)
 
+- [ ] API Inertia/Laravel diverifikasi via MCP Context7 (dan/atau kode yang terinstall) sebelum dipakai
 - [ ] `npm run build` lolos (tsc + vite, tanpa error)
 - [ ] `php artisan test` lolos; test baru untuk fitur baru
 - [ ] `npm run lint` bersih

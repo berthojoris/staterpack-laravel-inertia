@@ -13,11 +13,11 @@ class NewsController extends Controller
     public function index()
     {
         return Inertia::render('News/Index', [
-            'news' => Inertia::defer(
+            'news' => Inertia::scroll(
                 fn () => News::query()
                     ->orderByDesc('published_at')
-                    ->get(['id', 'title', 'slug', 'excerpt', 'author', 'image_url', 'published_at'])
-            ),
+                    ->simplePaginate(6, ['id', 'title', 'slug', 'excerpt', 'author', 'image_url', 'published_at'])
+            )->defer(),
         ]);
     }
 

@@ -23,3 +23,11 @@ export type PageProps<
         user: User;
     };
 };
+
+export type PublicPageProps<
+    T extends Record<string, unknown> = Record<string, unknown>,
+> = T & {
+    auth: {
+        user: User | null;
+    };
+};
